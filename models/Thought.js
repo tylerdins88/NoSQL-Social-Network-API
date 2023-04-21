@@ -6,12 +6,12 @@ const reactionSchema = new Schema(
             type: Schema.Types.ObjectId,
             default: () => new Types.ObjectId()
         },
-        reactionBody: {
+        reaction: {
             type: String,
             require: true,
             max_length: 280
         },
-        username: {
+        thoughtId: {
             type: String,
             require: true
         },
@@ -30,7 +30,7 @@ const reactionSchema = new Schema(
 
 const thoughtSchema = new Schema(
     {
-        thoughtText: {
+        thought: {
             type: String,
             require: true,
             max_length: 280
@@ -59,3 +59,7 @@ const thoughtSchema = new Schema(
         id: false
     }
 );
+
+const Thought = model("thought", thoughtSchema);
+
+module.exports = Thought;

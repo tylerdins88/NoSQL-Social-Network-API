@@ -21,7 +21,18 @@ module.exports = {
     // create a thought
     createThought(req, res) {
         Thought.create(req.body)
-            .then((thought) => res.json(thought))
+            .then((thought) => {
+                return User.findOneAndUpdate(
+                    { username: req.body.username },
+                    { $addToSet: { thoughts: thought._id } },
+                    { new: true }
+                )
+            })
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ message: "This thought was had, but we dont't know who :( " })
+                    : res.json("Thought was had!")
+            )
             .catch((err) => {
                 console.log(err);
                 return res.status(500).json(err);
@@ -52,7 +63,7 @@ module.exports = {
         console.log("You are making a reaction!");
         console.log(req.body);
         Thought.findOneAndUpdate(
-            { _id: req.params.thoughtID },
+            { _id: req.params.thoughtId },
             { $addToSet: { reactions: req.body } },
             { runValidators: true, new: true }
         )
@@ -67,7 +78,7 @@ module.exports = {
     removeReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: { reaction: { reactionId: req.params.reactionId } } },
+            { $pull: { reaction: req.params.reactionId } },
             { runValidators: true, new: true }
         )
             .then((thought) =>
