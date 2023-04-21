@@ -93,7 +93,7 @@ module.exports = {
             )
             .catch((err) => res.status(500).json(err));
     },
-    // remove thought from a user
+    // remove friend from a user
     removeFriend(req, res) {
         User.findOneAndUpdate(
             { _id: req.params.userId },
@@ -102,9 +102,7 @@ module.exports = {
         )
             .then((user) =>
                 !user
-                    ? res
-                        .status(404)
-                        .json({ message: "No user found with that ID :(" })
+                    ? res.status(404).json({ message: "No user found with that ID :(" })
                     : res.json({ message: "You are no longer friends. " })
             )
             .catch((err) => res.status(500).json(err));

@@ -78,13 +78,13 @@ module.exports = {
     removeReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: { reaction: req.params.reactionId } },
+            { $pull: { reactions: { reactionId: req.params.reactionId } } },
             { runValidators: true, new: true }
         )
             .then((thought) =>
                 !thought
                     ? res.status(404).json({ message: "No thought with that ID :(" })
-                    : res.json(thought)
+                    : res.json({ message: "Don't care anymore." })
             )
             .catch((err) => res.status(500).json(err));
     }
